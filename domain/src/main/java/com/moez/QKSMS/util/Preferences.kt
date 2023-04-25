@@ -30,6 +30,7 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.random.Random
 
 @Singleton
 class Preferences @Inject constructor(
@@ -168,7 +169,18 @@ class Preferences @Inject constructor(
         return when (address) {
             "" -> rxPrefs.getInteger("theme", 0xFF0097A7.toInt())
             else -> {
+                val themeSaltPref = rxPrefs.getString("theme_salt", "");
+                val themeSalt = when (themeSaltPref.get()) {
+                     "" -> {
+                        val newThemeSalt = ByteArray(16)
+                        Random.nextBytes(newThemeSalt);
+                        themeSaltPref.set(BigInteger(1, newThemeSalt).toString(16).padStart(32, '0'))
+                        newThemeSalt
+                    }
+                    else -> BigInteger(themeSaltPref.get(), 16).toByteArray()
+                }
                 val messageDigest = MessageDigest.getInstance("MD5")
+                messageDigest.update(themeSalt)
                 messageDigest.update(address.toByteArray())
                 val encodedDigest = BigInteger(1, messageDigest.digest()).toString(16).padStart(32, '0')
                 rxPrefs.getInteger("theme_$encodedDigest", default)
