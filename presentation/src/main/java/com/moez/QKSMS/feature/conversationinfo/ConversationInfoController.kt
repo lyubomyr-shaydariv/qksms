@@ -98,7 +98,7 @@ class ConversationInfoController(
 
     override fun recipientClicks(): Observable<Long> = adapter.recipientClicks
     override fun recipientLongClicks(): Observable<Long> = adapter.recipientLongClicks
-    override fun themeClicks(): Observable<Long> = adapter.themeClicks
+    override fun themeClicks(): Observable<String> = adapter.themeClicks
     override fun nameClicks(): Observable<*> = adapter.nameClicks
     override fun nameChanges(): Observable<String> = nameChangeSubject
     override fun notificationClicks(): Observable<*> = adapter.notificationClicks
@@ -110,8 +110,8 @@ class ConversationInfoController(
 
     override fun showNameDialog(name: String) = nameDialog.setText(name).show()
 
-    override fun showThemePicker(recipientId: Long) {
-        router.pushController(RouterTransaction.with(ThemePickerController(recipientId))
+    override fun showThemePicker(address: String) {
+        router.pushController(RouterTransaction.with(ThemePickerController(address))
                 .pushChangeHandler(QkChangeHandler())
                 .popChangeHandler(QkChangeHandler()))
     }

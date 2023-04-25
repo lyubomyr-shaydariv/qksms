@@ -149,13 +149,23 @@ class Preferences @Inject constructor(
         sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
     }.share()
 
+    @Deprecated("For old version migration purposes only")
     fun theme(
-        recipientId: Long = 0,
-        default: Int = rxPrefs.getInteger("theme", 0xFF0097A7.toInt()).get()
+        recipientId: Long
     ): Preference<Int> {
         return when (recipientId) {
             0L -> rxPrefs.getInteger("theme", 0xFF0097A7.toInt())
-            else -> rxPrefs.getInteger("theme_$recipientId", default)
+            else -> rxPrefs.getInteger("theme_$recipientId", 0xFF0097A7.toInt())
+        }
+    }
+
+    fun theme(
+        address: String = "",
+        default: Int = rxPrefs.getInteger("theme", 0xFF0097A7.toInt()).get()
+    ): Preference<Int> {
+        return when (address) {
+            "" -> rxPrefs.getInteger("theme", 0xFF0097A7.toInt())
+            else -> rxPrefs.getInteger("theme_$address", default) // TODO hash the address
         }
     }
 

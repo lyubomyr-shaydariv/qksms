@@ -34,14 +34,14 @@ import javax.inject.Named
 
 class ThemePickerPresenter @Inject constructor(
     prefs: Preferences,
-    @Named("recipientId") private val recipientId: Long,
+    @Named("address") private val address: String,
     private val billingManager: BillingManager,
     private val colors: Colors,
     private val navigator: Navigator,
     private val widgetManager: WidgetManager
-) : QkPresenter<ThemePickerView, ThemePickerState>(ThemePickerState(recipientId = recipientId)) {
+) : QkPresenter<ThemePickerView, ThemePickerState>(ThemePickerState(address = address)) {
 
-    private val theme: Preference<Int> = prefs.theme(recipientId)
+    private val theme: Preference<Int> = prefs.theme(address)
 
     override fun bindIntents(view: ThemePickerView) {
         super.bindIntents(view)
@@ -55,7 +55,7 @@ class ThemePickerPresenter @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { color ->
                     theme.set(color)
-                    if (recipientId == 0L) {
+                    if (address == "") {
                         widgetManager.updateTheme()
                     }
                 }
@@ -81,7 +81,7 @@ class ThemePickerPresenter @Inject constructor(
                         view.showQksmsPlusSnackbar()
                     } else {
                         theme.set(color)
-                        if (recipientId == 0L) {
+                        if (address == "") {
                             widgetManager.updateTheme()
                         }
                     }

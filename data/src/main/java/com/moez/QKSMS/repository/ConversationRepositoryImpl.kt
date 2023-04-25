@@ -244,6 +244,13 @@ class ConversationRepositoryImpl @Inject constructor(
                 .findFirst()
     }
 
+    override fun getRecipient(address: String): Recipient? {
+        return Realm.getDefaultInstance()
+                .where(Recipient::class.java)
+                .equalTo("address", address)
+                .findFirst()
+    }
+
     override fun getThreadId(recipient: String): Long? {
         return getThreadId(listOf(recipient))
     }

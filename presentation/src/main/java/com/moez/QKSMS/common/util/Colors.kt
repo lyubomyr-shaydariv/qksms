@@ -79,7 +79,7 @@ class Colors @Inject constructor(
     private val tertiaryTextLuminance = measureLuminance(context.getColorCompat(R.color.textTertiaryDark))
 
     fun theme(recipient: Recipient? = null): Theme {
-        val pref = prefs.theme(recipient?.id ?: 0)
+        val pref = prefs.theme(recipient?.address ?: "")
         val color = when {
             recipient == null || !prefs.autoColor.get() || pref.isSet -> pref.get()
             else -> generateColor(recipient)
@@ -90,8 +90,8 @@ class Colors @Inject constructor(
     fun themeObservable(recipient: Recipient? = null): Observable<Theme> {
         val pref = when {
             recipient == null -> prefs.theme()
-            prefs.autoColor.get() -> prefs.theme(recipient.id, generateColor(recipient))
-            else -> prefs.theme(recipient.id, prefs.theme().get())
+            prefs.autoColor.get() -> prefs.theme(recipient.address, generateColor(recipient))
+            else -> prefs.theme(recipient.address, prefs.theme().get())
         }
         return pref.asObservable()
                 .map { color -> Theme(color, this) }

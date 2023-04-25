@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.theme_picker_hsv.*
 import javax.inject.Inject
 
 class ThemePickerController(
-    val recipientId: Long = 0L
+    val address: String = ""
 ) : QkController<ThemePickerView, ThemePickerState, ThemePickerPresenter>(), ThemePickerView {
 
     @Inject override lateinit var presenter: ThemePickerPresenter
@@ -109,7 +109,7 @@ class ThemePickerController(
     override fun viewQksmsPlusClicks(): Observable<*> = viewQksmsPlusSubject
 
     override fun render(state: ThemePickerState) {
-        tabs.setRecipientId(state.recipientId)
+        tabs.setAddress(state.address)
 
         hex.setText(Integer.toHexString(state.newColor).takeLast(6))
 

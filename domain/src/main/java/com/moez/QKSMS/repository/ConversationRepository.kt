@@ -60,6 +60,8 @@ interface ConversationRepository {
 
     fun getRecipient(recipientId: Long): Recipient?
 
+    fun getRecipient(address: String): Recipient?
+
     fun getThreadId(recipient: String): Long?
 
     fun getThreadId(recipients: Collection<String>): Long?

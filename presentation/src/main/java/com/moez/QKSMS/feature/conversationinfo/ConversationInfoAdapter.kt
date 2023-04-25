@@ -28,7 +28,7 @@ class ConversationInfoAdapter @Inject constructor(
 
     val recipientClicks: Subject<Long> = PublishSubject.create()
     val recipientLongClicks: Subject<Long> = PublishSubject.create()
-    val themeClicks: Subject<Long> = PublishSubject.create()
+    val themeClicks: Subject<String> = PublishSubject.create()
     val nameClicks: Subject<Unit> = PublishSubject.create()
     val notificationClicks: Subject<Unit> = PublishSubject.create()
     val archiveClicks: Subject<Unit> = PublishSubject.create()
@@ -53,7 +53,7 @@ class ConversationInfoAdapter @Inject constructor(
 
                 theme.setOnClickListener {
                     val item = getItem(adapterPosition) as? ConversationInfoRecipient
-                    item?.value?.id?.run(themeClicks::onNext)
+                    item?.value?.address?.run(themeClicks::onNext)
                 }
             }
 
