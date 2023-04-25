@@ -26,6 +26,8 @@ import com.f2prateek.rx.preferences2.Preference
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.moez.QKSMS.common.util.extensions.versionCode
 import io.reactivex.Observable
+import java.math.BigInteger
+import java.security.MessageDigest
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -165,7 +167,12 @@ class Preferences @Inject constructor(
     ): Preference<Int> {
         return when (address) {
             "" -> rxPrefs.getInteger("theme", 0xFF0097A7.toInt())
-            else -> rxPrefs.getInteger("theme_$address", default) // TODO hash the address
+            else -> {
+                val messageDigest = MessageDigest.getInstance("MD5")
+                messageDigest.update(address.toByteArray())
+                val encodedDigest = BigInteger(1, messageDigest.digest()).toString(16).padStart(32, '0')
+                rxPrefs.getInteger("theme_$encodedDigest", default)
+            }
         }
     }
 
