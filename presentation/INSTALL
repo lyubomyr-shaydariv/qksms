@@ -1,0 +1,3 @@
+#!/bin/sh
+
+adb install -f ./build/outputs/apk/noAnalytics/debug/QKSMS-v3.9.4-noAnalytics-debug.apk
